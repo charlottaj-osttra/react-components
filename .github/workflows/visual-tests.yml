@@ -21,6 +21,7 @@ jobs:
       - name: Run storybook
         run: |
           npm run build-storybook
+          npx http-server storybook-static --port 6006 &
 
       - name: Run Playwright tests
         run: npx playwright test
