@@ -66,5 +66,5 @@ IconButton.propTypes = {
 IconButton.defaultProps = {
   isPill: true,
   isBasic: true,
-  size: 'medium'
+  size: 'large'
 };
