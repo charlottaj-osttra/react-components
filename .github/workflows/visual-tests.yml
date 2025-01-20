@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main, master ]
 jobs:
-  setup:
+  test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -26,9 +26,10 @@ jobs:
       - name: Set up cache
         id: cache
         uses: actions/cache@v4
+        env:
+          cache-name: snapshot-cache
         with:
-          key: cache/${{github.repository}}/${{github.ref}}
-          restore-keys: cache/${{github.repository}}/refs/heads/master
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
           path: .test/**
 
       - name: Initialize snapshots
@@ -36,11 +37,8 @@ jobs:
           ${{steps.cache.outputs.cache-hit != 'true' || inputs.update-snapshots
           == 'true'}}
         run: npx playwright test --update-snapshots --reporter html
-  test:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
+
+
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v4
